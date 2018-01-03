@@ -1,27 +1,38 @@
 var MovingObject = function () {
+	// the image that appears as the object
 	this.image = new Image();
 	this.image.src = 'images/1.png';
-	this.Xspeed = 1;
-	this.Yspeed = 1;
-	this.Xpos = 0;
-	this.Ypos = 0;
+	// coordintates of the object where the origin is at the top left of the canvas
+	this.Xpos = -100;
+	this.Ypos = 100;
+	// speed components of the object in the horizontal and vertical directions respectively
+	this.Xspeed = 3;
+	this.Yspeed = 0;
+
+	this.visible = true;	// flag to remove the object when the object outs the boundaries
+}
+MovingObject.prototype.move = function() {
+	if(this.Xpos < -100 || this.Ypos < -100 || this.Xpos > 800 || this.Ypos > 600) { // check when the ..
+		this.visible = false; // .. object gets out the boundaries of the canvas
+		this.Xpos = -100;
+		this.Ypos = 100;
+	} else {
+		this.visible = true;
+	}
+	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos += this.Yspeed);
 }
 
-// MovingObject.prototype.move = function() {
-// 	this.Xpos += this.Xspeed;
-// 	this.Ypos += this.Yspeed;
-// };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var ctx = document.getElementById('canvas').getContext('2d');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-var obj = new MovingObject;
+var obj1 = new MovingObject;
 function init() {
 	window.requestAnimationFrame(draw);
 }
 function draw() {
-
-	ctx.clearRect(0, 0, 500, 700);
-	ctx.drawImage(obj.image, obj.Xpos += obj.Xspeed, obj.Ypos += obj.Yspeed, 50, 50);
+	ctx.clearRect(0, 0, 700, 500);
+	if(obj1.visible)
+		obj1.move();
 	window.requestAnimationFrame(draw);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
