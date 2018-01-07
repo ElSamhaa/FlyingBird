@@ -2,21 +2,38 @@ var MovingObject = function() {
 	// the image that appears as the object
 	this.image = new Image();
 	this.image.src = 'images/1.png';
-	this.imageXDimension = 100;
-	this.imageYDimension = 100;
+	this.imageXDimension = 100; // width of the image
+	this.imageYDimension = 100; // height of the image
 	// coordintates of the object where the origin is at the top left of the canvas
 	this.Xpos = 800;
 	this.Ypos = 100;
 	// speed components of the object in the horizontal and vertical directions respectively
-	this.Xspeed = -3;
+	this.Xspeed = -2;
 	this.Yspeed = 0;
 }
 MovingObject.prototype.move = function() {
-	if(this.Xpos < -this.imageXDimension || this.Ypos < -this.imageYDimension || this.Xpos > 700 + this.imageXDimension || this.Ypos > 500 + this.imageYDimension) { // check when the ..
+	// reset position when the whole object gets out of the canvas borders
+	if(this.Xpos < -this.imageXDimension || this.Ypos < -this.imageYDimension
+	|| this.Xpos > 700 + this.imageXDimension || this.Ypos > 500 + this.imageYDimension) {
 		this.Xpos = 700 + this.imageXDimension;
 		this.Ypos = 100;
 	}
-	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos += this.Yspeed);
+	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos += this.Yspeed); // draw into canvas
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var Cloud = function() {
+	MovingObject.call(this);
+	this.image.src = 'images/3.png';
+	this.imageXDimension = 95;
+	this.imageYDimension = 37;
+	this.Xspeed = -0.5;
+	this.Xpos = 700, this.Ypos = 50;
+}
+Cloud.prototype.move = function() {
+	if(this.Xpos < -this.imageXDimension) { // check when the image totally outs the canvas borders
+		this.Xpos = 700;
+	}
+	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var Obstacle = function() {
@@ -28,12 +45,12 @@ var Ground = function() {
 	this.image.src = 'images/2.png';
 	this.imageXDimension = 2400;
 	this.imageYDimension = 24;
-	this.Xspeed = -4;
+	this.Xspeed = -1;
 	this.Xpos = 0, this.Ypos = 450;
 	this.Xpos2 = this.imageXDimension, this.Ypos2 = 450;
 }
 Ground.prototype.move = function() {
-	if(this.Xpos < -this.imageXDimension) { // check when the ..
+	if(this.Xpos < -this.imageXDimension) { // check when the image totally outs the canvas borders
 		this.Xpos = this.imageXDimension;
 	} else if(this.Xpos2 < -this.imageXDimension) {
 		this.Xpos2 = this.imageXDimension;
@@ -48,15 +65,17 @@ var ctx = document.getElementById('canvas').getContext('2d');
 var obj1 = new MovingObject;
 var obj2 = new MovingObject;
 var groundObj = new Ground;
+var cloudObj = new Cloud;
 obj2.Xpos = 600;
 function init() {
 	window.requestAnimationFrame(draw);
 }
 function draw() {
-	ctx.clearRect(0, 0, 700, 500);
+	ctx.clearRect(0, 0, 700, 500); // to clear the canvas each frame
 	obj1.move();
 	obj2.move();
 	groundObj.move();
+	cloudObj.move();
 	window.requestAnimationFrame(draw);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
