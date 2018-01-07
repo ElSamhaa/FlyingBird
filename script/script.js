@@ -30,8 +30,8 @@ var Cloud = function() {
 	this.Xpos = 700, this.Ypos = 50;
 }
 Cloud.prototype.move = function() {
-	if(this.Xpos < -this.imageXDimension) { // check when the image totally outs the canvas borders
-		this.Xpos = 700;
+	if(this.Xpos < -this.imageXDimension) { // checks when the image totally outs the canvas borders
+		this.Xpos = 700; // sets the Xposition to the right border of the canvas
 	}
 	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos);
 }
@@ -40,6 +40,20 @@ var Obstacle = function() {
 	MovingObject.call(this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var Cactus = function() {
+	Obstacle.call(this);
+	this.image.src = 'images/4.png';
+	this.imageXDimension = 49;
+	this.imageYDimension = 102;
+	this.Xspeed = -1;
+	this.Xpos = 700, this.Ypos = 366;
+}
+Cactus.prototype.move = function() {
+	if(this.Xpos < -this.imageXDimension) { // checks when the image totally outs the canvas borders
+		this.Xpos = 700; // sets the Xposition to the right border of the canvas
+	}
+	ctx.drawImage(this.image, this.Xpos += this.Xspeed, this.Ypos);
+}
 var Ground = function() {
 	Obstacle.call(this);
 	this.image.src = 'images/2.png';
@@ -50,8 +64,8 @@ var Ground = function() {
 	this.Xpos2 = this.imageXDimension, this.Ypos2 = 450;
 }
 Ground.prototype.move = function() {
-	if(this.Xpos < -this.imageXDimension) { // check when the image totally outs the canvas borders
-		this.Xpos = this.imageXDimension;
+	if(this.Xpos < -this.imageXDimension) { // checks when the image totally outs the canvas borders
+		this.Xpos = this.imageXDimension; // 
 	} else if(this.Xpos2 < -this.imageXDimension) {
 		this.Xpos2 = this.imageXDimension;
 	}
@@ -66,16 +80,18 @@ var obj1 = new MovingObject;
 var obj2 = new MovingObject;
 var groundObj = new Ground;
 var cloudObj = new Cloud;
+var cactusObj = new Cactus;
 obj2.Xpos = 600;
 function init() {
 	window.requestAnimationFrame(draw);
 }
 function draw() {
 	ctx.clearRect(0, 0, 700, 500); // to clear the canvas each frame
+	cloudObj.move();
 	obj1.move();
 	obj2.move();
 	groundObj.move();
-	cloudObj.move();
+	cactusObj.move();
 	window.requestAnimationFrame(draw);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
