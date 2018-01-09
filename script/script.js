@@ -30,13 +30,39 @@ MovingObject.prototype.draw = function() { // draw into canvas
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+var FlyingBird = function() {
+	MovingObject.call(this);
+
+	this.image.src = 'images/5.png';
+	this.imageXDimension = 91;
+	this.imageXDimension = 97;
+
+	this.Xpos = 100, this.Ypos = 100;
+
+	this.Xspeed = 0, this.Yspeed = 0;
+	this.Yacceleration = 0.2;
+
+}
+
+FlyingBird.prototype.update = function() {
+	this.Ypos += this.Yspeed;
+	this.Yspeed += this.Yacceleration;
+}
+
+FlyingBird.prototype.draw = function() {
+	ctx.drawImage(this.image, this.Xpos, this.Ypos);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var Cloud = function() {
 	MovingObject.call(this);
+
 	this.image.src = 'images/3.png';
 	this.imageXDimension = 95;
 	this.imageYDimension = 37;
-	this.Xspeed = -0.5;
+
 	this.Xpos = 700, this.Ypos = 50;
+
+	this.Xspeed = -0.5;
 }
 
 Cloud.prototype.update = function() {
@@ -121,6 +147,7 @@ var obj2 = new MovingObject; // 2nd bird demo
 obj2.Xpos = 600; // starting position for second bird
 var groundObj = new Ground; // a ground demo
 var cloudObj = new Cloud; // a cloud demo
+var flyingBirdObj = new FlyingBird;
 var cactusObj = new Cactus; // a cactus demo
 
 function draw(tframe) { // tframe is an implicit parameter automatically passed to the callback function ..
@@ -134,11 +161,13 @@ function draw(tframe) { // tframe is an implicit parameter automatically passed 
 		obj2.update();
 		groundObj.update();
 		cactusObj.update();
+		flyingBirdObj.update();
 		cloudObj.draw();
 		obj1.draw();
 		obj2.draw();
 		groundObj.draw();
 		cactusObj.draw();
+		flyingBirdObj.draw();
 		then = tframe;
 	}
 
