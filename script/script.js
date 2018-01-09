@@ -40,13 +40,15 @@ var FlyingBird = function() {
 	this.Xpos = 100, this.Ypos = 100;
 
 	this.Xspeed = 0, this.Yspeed = 0;
-	this.Yacceleration = 0.2;
+	this.Yacceleration = 0.3;
 
 }
 
 FlyingBird.prototype.update = function() {
 	this.Ypos += this.Yspeed;
-	this.Yspeed += this.Yacceleration;
+	if(this.Yspeed < 10) { // set a maximum downward speed
+		this.Yspeed += this.Yacceleration;
+	}
 }
 
 FlyingBird.prototype.draw = function() {
@@ -138,9 +140,13 @@ Ground.prototype.draw = function() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+document.addEventListener('keydown', function() {
+	if(flyingBirdObj.Yspeed > -5) flyingBirdObj.Yspeed -= 5; // set the maximum Yspeed
+});
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var ctx = document.getElementById('canvas').getContext('2d');
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-var then = 0, deltaTimeFrame = 0;
+var then = 0;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var obj1 = new MovingObject; // a bird demo
 var obj2 = new MovingObject; // 2nd bird demo
@@ -153,15 +159,16 @@ var cactusObj = new Cactus; // a cactus demo
 function draw(tframe) { // tframe is an implicit parameter automatically passed to the callback function ..
 	// i.e. draw function, by the requestAnimationFrame(). tframe represents a timestamp in milliseconds ..
 	// starting the moment the user load the page
-	deltaTimeFrame = tframe - then;
-	if(deltaTimeFrame >= 30) { // to set the refresh rate of the canvas as once every 30 milliseconds
-		ctx.clearRect(0, 0, 700, 500); // to clear the canvas each frame
+	if(tframe - then >= 30) { // to set the refresh rate of the canvas as once every 30 milliseconds
+		ctx.clearRect(0, 0, 700, 500); // to clear the canvas for each frame
+
 		cloudObj.update();
 		obj1.update();
 		obj2.update();
 		groundObj.update();
 		cactusObj.update();
 		flyingBirdObj.update();
+
 		cloudObj.draw();
 		obj1.draw();
 		obj2.draw();
