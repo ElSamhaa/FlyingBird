@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<style>
+  #bird1{
+    position: absolute;
+    top: 100px;
+    left:100px;
+  }
+  .container{
+    background-image: url("images/bg1.svg");
+    height: 630px;
+    width: 1280px;
+    background-repeat: repeat-x;
+    background-position: center center;
+  }
+  .image-radio{
+    position: relative;
+    top:110px;
+    left:410px;
+  }
+  #sesc{
+    margin-left:40em;
+  }
+
+#startplay{
+    position: absolute;
+    background-color: green;
+    border: none;
+    color: black;
+    padding: 15px 62px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 8px 6px;
+    cursor: pointer;
+    top: 320px;
+    left: 450px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+#startplay:hover{
+  transition-duration: 0.8s;
+  background-color: blue;
+  color: white;
+}
+#playername{
+  position: absolute;
+  top: 300px;
+  left: 440px;
+}
+#displayname{
+  position: absolute;
+  top: 15px;
+  left: 440px;
+  background-color: rgba(117, 190, 218, 0.2);
+}
+#displaylives{
+  position: absolute;
+  top: 15px;
+  left: 600px;
+  background-color: rgba(117, 190, 218, 0.2);
+}
+#displaylives1{
+  position: absolute;
+  top: 20px;
+  left: 640px;
+  background-color: rgba(117, 190, 218, 0.2);
+}
+#playagain{
+  background-color: rgba(117, 190, 218, 0.1);
+  position: absolute;
+  cursor: pointer;
+  top: 30px;
+  border-radius: 50%;
+}
+#score{
+  position: absolute;
+  top: 15px;
+  left: 700px;
+  background-color: rgba(117, 190, 218, 0.2);
+}
+#showscore{
+  position: absolute;
+  font-size: 50px;
+  font-style: oblique;
+  top: 300px;
+  left: 300px;
+  background-color: rgba(117, 190, 218, 0.1);
+}
+#main{
+  position: absolute;
+  top: 30px;
+  left: 300px;
+  background-color: rgba(117, 190, 218, 0);
+}
+#obsimage{
+  position: absolute;
+  bottom: 2%;
+  right: 10px;
+}
+</style>
+</head>
+<body>
+  <div class="container" id="startpage">
+
+    <span class="image-radio">
+        <input id="char1" name="char1on1" class="character" type="radio" value="1"/>
+        <label class="choice" for="char1"><img src="images/1.png" width="150" height="130"></label>
+
+        <input id="char2" name="char2on2" class="character" type="radio" value="2"/>
+        <label class="choice" for="char2"><img src="images/11.png" width="150" height="130"></label>
+
+    </span>
+
+    <span id="playername">
+      Player Name: <input id="playername1" name="Player Name:" type="text" value="player"/>
+    </span>
+
+    <button id="startplay">Play</button>
+  </div>
+
+  <div id="gamepage" class="container" style="display:none">
+    <b id="displayname"></b>
+    <img id="displaylives" height="30" width="40"/>
+    <b id="displaylives1"></b>
+    <img id="bird1">
+    <b id="score"></b>
+    <div id="obstacles">
+      <img id="obsimage" width="60" height=""/>
+    </div>
+
+
+  </div>
+
+  <div id="endpage" class="container" style="display:none">
+    <button id="playagain"><img id="endgame" width="200" height="200"/></button>
+    <b id="showscore"></b>
+    <a id="main" href=""><img src="images/main.png" width="200" height="200"/></a>
+  </div>
+
+<script src="pro1.js"></script>
+<!-- <script src="pro2.js"></script> -->
+</body>
+</html>
