@@ -25,10 +25,30 @@ var count = 0;
 var keepjump = 'true';
 var crash = 'false';
 
-//##### the bird class #####
+//##########################     Moving Object Class     #####
+var MovingObject = function(x = 150, y = 100 ,dx,dy) {
+  this.pos_x = x;
+  this.pos_y = y;
+}
+
+MovingObject.prototype.getposy = function () {
+  return this.pos_y;
+};
+
+MovingObject.prototype.getposx = function () {
+  return this.pos_x;
+};
+
+MovingObject.prototype.setposy = function () {
+  return this.pos_y;
+};
+
+MovingObject.prototype.setposx = function () {
+  return this.pos_x;
+};
+//##########################     the bird class     #####
  var bird = function() {
-   this.pos_y = 100;
-   this.pos_x = 150;
+   MovingObject.call(this);
    this.player_name;
    this.lives = 3;
    this.scoree = 0;
@@ -39,49 +59,56 @@ var crash = 'false';
      }
    }.bind(this))
  }
+
+bird.prototype = Object.create(MovingObject.prototype);
+bird.prototype.constructor = bird;
+
+
  bird.prototype.setplayername = function (pname) {
    this.player_name = pname;
  };
+
  bird.prototype.getplayername = function () {
    return this.player_name;
  };
+
  bird.prototype.decreaselives = function () {
    this.lives--;
  };
+
  bird.prototype.getlives = function () {
    return this.lives;
  };
- bird.prototype.getbirdposy = function () {
-   return this.pos_y;
- };
- bird.prototype.getbirdposx = function () {
-   return this.pos_x;
- };
+
  bird.prototype.setscore = function () {
    this.scoree += 2;
    score.innerHTML = `Score: ${this.scoree}`;
  };
+
  bird.prototype.getscore = function () {
    return this.scoree;
  };
+
  bird.prototype.printscore = function () {
    score.innerHTML = `Score: ${this.scoree}`;
    scoreint = setInterval(this.setscore.bind(this),3000);
  };
+
  bird.prototype.wingmove = function () {
-
   wingmov = setInterval(this.changeimg,90);
-
  };
+
 bird.prototype.gravity = function () {
     grav = setInterval(this.set_y.bind(this), 90);
 };
+
 bird.prototype.changeimg = function () {
   img.src = birdwings[count++];
   if (count === 4) {
     count = 0;
   }
 };
+
 bird.prototype.crash = function () {
   if (parseInt(getComputedStyle(obsimage).left) <= this.pos_x) {
     if (this.pos_y+50 >= parseInt(getComputedStyle(obsimage).top)) {
@@ -92,6 +119,7 @@ bird.prototype.crash = function () {
     }
   }
 };
+
 bird.prototype.whencrash = function () {
   clearInterval(grav);
   clearInterval(wingmov);
@@ -104,6 +132,7 @@ bird.prototype.whencrash = function () {
     this.printscore();
   }.bind(this), 1000)
 };
+
 bird.prototype.set_y = function () {
   this.pos_y += 7
   img.style.top= this.pos_y +"px";
@@ -128,7 +157,7 @@ bird.prototype.set_y = function () {
   }
 };
 
-
+// play button
 playbutton.addEventListener("click", function() {
   if (character[0].checked === true) {
     birdwings = ["images/1.png","images/2.png","images/3.png","images/4.png"];
@@ -144,7 +173,36 @@ playbutton.addEventListener("click", function() {
   gameloop();
 })
 
-//###### the game loop ######
+
+//##########################    the obstacles class and proto types     ########
+obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
+obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
+
+var obstacles = function() {
+  MovingObject.call(this, 10,0);
+}
+
+obstacles.prototype = Object.create(MovingObject.prototype);
+obstacles.prototype.constructor = obstacles;
+
+
+obstacles.prototype.setposx = function () {
+  this.pos_x += 10;
+  obsimage.style.right = this.pos_x +"px";
+  if (this.pos_x > window.innerWidth-140) {
+    this.pos_x = 10;
+    setTimeout(function() {
+      obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
+      obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
+    },100)
+  }
+};
+
+obstacles.prototype.obsmove = function () {
+  moveleft = setInterval(this.setposx.bind(this), 50);
+};
+
+//##########################    the game loop     ############
 function gameloop() {
   var b1 = new bird;
   var obs = new obstacles;
@@ -171,37 +229,3 @@ function gameloop() {
     endpage.style.display = 'none';
   })
 }
-
-
-
-//######## the obstacles class and proto types ########
-obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
-obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
-
-var obstacles = function() {
-  this.posx = 10;
-  this.posy = 0;
-}
-obstacles.prototype.setposx = function () {
-  this.posx += 10;
-  obsimage.style.right = this.posx +"px";
-  if (this.posx > window.innerWidth-140) {
-    this.posx = 10;
-    setTimeout(function() {
-      obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
-      obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
-    },100)
-  }
-};
-obstacles.prototype.getposx = function () {
-  return this.posx;
-};
-obstacles.prototype.setposy = function (nuum) {
-  this.posy = nuum;
-};
-obstacles.prototype.getposy = function () {
-  return this.posy;
-};
-obstacles.prototype.obsmove = function () {
-  moveleft = setInterval(this.setposx.bind(this), 50);
-};
