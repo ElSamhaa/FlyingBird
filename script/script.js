@@ -1,3 +1,6 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+var ctx = document.getElementById('canvas').getContext('2d');
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var MovingObject = function() {
 	// the image that appears as the object
 	this.image = new Image();
@@ -5,7 +8,7 @@ var MovingObject = function() {
 	this.imageXDimension = 100; // width of the image
 	this.imageYDimension = 100; // height of the image
 	// coordintates of the object where the origin is at the top left of the canvas
-	this.Xpos = 800;
+	this.Xpos = 100; //************************************** 800
 	this.Ypos = 100;
 	// speed components of the object in the horizontal and vertical directions respectively
 	this.Xspeed = -2;
@@ -30,31 +33,6 @@ MovingObject.prototype.draw = function() { // draw into canvas
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-var FlyingBird = function() {
-	MovingObject.call(this);
-
-	this.image.src = 'images/5.png';
-	this.imageXDimension = 91;
-	this.imageXDimension = 97;
-
-	this.Xpos = 100, this.Ypos = 100;
-
-	this.Xspeed = 0, this.Yspeed = 0;
-	this.Yacceleration = 0.3;
-
-}
-
-FlyingBird.prototype.update = function() {
-	this.Ypos += this.Yspeed;
-	if(this.Yspeed < 10) { // set a maximum downward speed
-		this.Yspeed += this.Yacceleration;
-	}
-}
-
-FlyingBird.prototype.draw = function() {
-	ctx.drawImage(this.image, this.Xpos, this.Ypos);
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var Cloud = function() {
 	MovingObject.call(this);
 
@@ -66,6 +44,8 @@ var Cloud = function() {
 
 	this.Xspeed = -0.5;
 }
+Cloud.prototype = Object.create(MovingObject.prototype);
+Cloud.prototype.constructor = Cloud;
 
 Cloud.prototype.update = function() {
 	this.Xpos += this.Xspeed;
@@ -75,27 +55,108 @@ Cloud.prototype.update = function() {
 	}
 }
 
-Cloud.prototype.draw = function() {
-	ctx.drawImage(this.image, this.Xpos, this.Ypos);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+var CollObj = function(px, py, pr) {
+	this.x = px, this.y = py;
+	this.radius = pr;
+}
+// CollObj.prototype.draw = function() {
+// 	ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+// 	ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
+// 	ctx.fill();
+// }
+var calcDistance = function(x1, y1, x2, y2) {
+	return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2))
+}
+CollObj.prototype.checkColl = function(pCollObj) {
+	var distanceBetween = calcDistance(this.x, this.y, pCollObj.x, pCollObj.y);
+	if (distanceBetween < this.radius + pCollObj.radius)
+		console.log('they have intersected');
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-var Obstacle = function() {
+var Obstacle = function(xdim, ydim, xpos, ypos) {
 	MovingObject.call(this);
+	this.imageXDimension = xdim, this.imageYDimension = ydim;
+	this.Xpos = xpos, this.Ypos = ypos;
+	this.collObj = new CollObj(0.37 * this.imageXDimension + this.Xpos,
+		0.55 * this.imageYDimension + this.Ypos, 0.4 * this.imageXDimension);
+	
+}
+Obstacle.prototype = Object.create(MovingObject.prototype);
+Obstacle.prototype.constructor = Obstacle;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+var FlyingTRex = function() {
+	Obstacle.call(this, 91, 97, 100, 100);
+
+	this.collObj2 = new CollObj(this.collObj.x + 0.68 * this.collObj.radius,
+		this.collObj.y - 0.78 * this.collObj.radius, 0.63 * this.collObj.radius);
+
+	this.image.src = 'images/5.png';
+	this.Xspeed = 0;
+	this.Yacceleration = 0.5;
+}
+FlyingTRex.prototype = Object.create(Obstacle.prototype);
+FlyingTRex.prototype.constructor = FlyingTRex;
+
+FlyingTRex.prototype.update = function() {
+	this.Ypos += this.Yspeed, this.collObj.y += this.Yspeed, this.collObj2.y += this.Yspeed;
+	if(this.Yspeed < 10) { // set a maximum downward speed
+		this.Yspeed += this.Yacceleration;
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+var Bird = function() {
+	Obstacle.call(this, 93, 80, 300, 100);
+	this.collObj = new CollObj(0.55 * this.imageXDimension + this.Xpos,
+		0.55 * this.imageYDimension + this.Ypos, 0.22 * this.imageXDimension);
+	this.collObj2 = new CollObj(0.22 * this.imageXDimension + this.Xpos,
+		0.31 * this.imageYDimension + this.Ypos, 0.2 * this.imageXDimension);
+	this.collObj3 = new CollObj(0.9 * this.imageXDimension + this.Xpos,
+		0.5 * this.imageYDimension + this.Ypos, 0.13 * this.imageXDimension);
+
+	this.image.src = 'images/1.png';
+
+	this.Xspeed = -2, this.Yspeed = 0;
+	this.Yacceleration = 0.3;
+
+}
+Bird.prototype = Object.create(Obstacle.prototype);
+Bird.prototype.constructor = Bird;
+
+Bird.prototype.update = function() {
+	this.Xpos += this.Xspeed, this.collObj.x += this.Xspeed, this.collObj2.x += this.Xspeed,
+	this.collObj3.x += this.Xspeed;
+	if(this.Xpos < -this.imageXDimension) {
+		this.Xpos = 700, this.collObj.x = 700, this.collObj2.x = 700, this.collObj3.x = 700;
+	}
+}
+
+Bird.prototype.draw = function() {
+	ctx.drawImage(this.image, this.Xpos, this.Ypos);
+	// this.collObj.draw();
+	// this.collObj2.draw();
+	// this.collObj3.draw();
+	this.collObj.checkColl(flyingTRexObj.collObj);
+	this.collObj.checkColl(flyingTRexObj.collObj2);
+	this.collObj2.checkColl(flyingTRexObj.collObj);
+	this.collObj2.checkColl(flyingTRexObj.collObj2);
+	this.collObj3.checkColl(flyingTRexObj.collObj);
+	this.collObj3.checkColl(flyingTRexObj.collObj2);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var Cactus = function() {
-	Obstacle.call(this);
+	Obstacle.call(this, 49, 102, 700, 368);
 
 	this.image.src = 'images/4.png';
-	this.imageXDimension = 49;
-	this.imageYDimension = 102;
-
-	this.Xpos = 700, this.Ypos = 368;
 
 	this.Xspeed = -1;
 }
+Cactus.prototype = Object.create(Obstacle.prototype);
+Cactus.prototype.constructor = Cactus;
 
 Cactus.prototype.update = function() {
 	this.Xpos += this.Xspeed;
@@ -103,10 +164,6 @@ Cactus.prototype.update = function() {
 	if(this.Xpos < -this.imageXDimension) { // checks when the image totally outs the canvas borders
 		this.Xpos = 700; // sets the Xposition to the right border of the canvas
 	}
-}
-
-Cactus.prototype.draw = function() {
-	ctx.drawImage(this.image, this.Xpos, this.Ypos);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,6 +179,8 @@ var Ground = function() {
 
 	this.Xspeed = -1;
 }
+Ground.prototype = Object.create(Obstacle.prototype);
+Ground.prototype.constructor = Ground;
 
 Ground.prototype.update = function() {
 	this.Xpos2 += this.Xspeed;
@@ -141,19 +200,17 @@ Ground.prototype.draw = function() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 document.addEventListener('keydown', function() {
-	if(flyingBirdObj.Yspeed > -5) flyingBirdObj.Yspeed -= 5; // set the maximum Yspeed
+	if(flyingTRexObj.Yspeed > -5) flyingTRexObj.Yspeed -= 5; // set the maximum Yspeed
 });
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-var ctx = document.getElementById('canvas').getContext('2d');
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 var then = 0;
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-var obj1 = new MovingObject; // a bird demo
-var obj2 = new MovingObject; // 2nd bird demo
-obj2.Xpos = 600; // starting position for second bird
+
+var bird1 = new Bird; // a bird demo
+var bird2 = new Bird; // 2nd bird demo
+bird2.Xpos = 600; // starting position for second bird
 var groundObj = new Ground; // a ground demo
 var cloudObj = new Cloud; // a cloud demo
-var flyingBirdObj = new FlyingBird;
+var flyingTRexObj = new FlyingTRex;
 var cactusObj = new Cactus; // a cactus demo
 
 function draw(tframe) { // tframe is an implicit parameter automatically passed to the callback function ..
@@ -163,70 +220,26 @@ function draw(tframe) { // tframe is an implicit parameter automatically passed 
 		ctx.clearRect(0, 0, 700, 500); // to clear the canvas for each frame
 
 		cloudObj.update();
-		obj1.update();
-		obj2.update();
+		bird1.update();
+		bird2.update();
 		groundObj.update();
 		cactusObj.update();
-		flyingBirdObj.update();
+		flyingTRexObj.update();
 
 		cloudObj.draw();
-		obj1.draw();
-		obj2.draw();
+		bird1.draw();
+		bird2.draw();
 		groundObj.draw();
 		cactusObj.draw();
-		flyingBirdObj.draw();
+		flyingTRexObj.draw();
 		then = tframe;
 	}
 
 	window.requestAnimationFrame(draw); // a non-blocking recursive call for the requestAnimationFrame()
 }
 
-function init() { // function that initialize the game environment
+function init() { // function that initializes the game environment
 	window.requestAnimationFrame(draw);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 init();
-
-
-
-
-
-// /////////////////////////////////////////Some global variables////////////////////////////////////////
-// var lastRender = null;
-// var lastTick = null;
-// var ticklength = null;
-// var stopMain = null;
-// //////////////////////////////////////////////Main Function////////////////////////////////////////
-// function main( tFrame ) {
-//     stopMain = window.requestAnimationFrame( main );
-//     draw();
-//     var nextTick = lastTick + tickLength;
-//     var numTicks = 0;
-
-//     //If tFrame < nextTick then 0 ticks need to be updated (0 is default for numTicks).
-//     //If tFrame = nextTick then 1 tick needs to be updated (and so forth).
-//     //Note: As we mention in summary, you should keep track of how large numTicks is.
-//     //If it is large, then either your game was asleep, or the machine cannot keep up.
-//     if (tFrame > nextTick) {
-// 		var timeSinceTick = tFrame - lastTick;
-// 		numTicks = Math.floor( timeSinceTick / tickLength );
-//     }
-
-//     queueUpdates( numTicks );
-//     render( tFrame );
-//     lastRender = tFrame;
-// }
-
-// function queueUpdates( numTicks ) {
-//     for(var i=0; i < numTicks; i++) {
-// 		lastTick = lastTick + tickLength; //Now lastTick is this tick.
-// 		draw( lastTick );
-//     }
-// }
-
-// lastTick = performance.now();
-// lastRender = lastTick; //Pretend the first draw was on first update.
-// tickLength = 50; //This sets your simulation to run at 20Hz (50ms)
-
-// // setInitialState();
-// main(performance.now()); // Start the cycle
