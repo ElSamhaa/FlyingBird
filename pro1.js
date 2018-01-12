@@ -1,16 +1,16 @@
-// remove
+// last added variables
 var heightarray = ["70","90","110","130","150","170","190","210,230,300"];
 var header = document.getElementById('header-bar')
 var level = document.getElementById("level")
 var choosebtn = document.getElementById("choose")
 var levelsimg = document.getElementById("levels")
 var showlevel = document.getElementById("showlevel")
-var level_1_btn = document.getElementById("choose1")
-var level_2_btn = document.getElementById("choose2")
-var level_3_btn = document.getElementById("choose3")
-
-
-
+var levels = [
+  document.getElementById("choose1"),
+  document.getElementById("choose2"),
+  document.getElementById("choose3")
+]
+var levelsPics = [ "url('images/12.png')" , "url('images/2.jpg')" , "url('images/3.jpg')" ]
 
 // ##### the global variables #####
 // pages
@@ -48,6 +48,7 @@ var birdImages = [
   ["images/11.png","images/22.png","images/33.png","images/44.png"],
   ["images/111.png","images/222.png","images/333.png","images/444.png"] // default images
 ]
+
 //##########################     Moving Object Class     #####
 var MovingObject = function(x , y , dx , dy) {
   this.pos_x = x;
@@ -55,22 +56,6 @@ var MovingObject = function(x , y , dx , dy) {
   this.dx = dx;
   this.dy = dy;
 }
-
-MovingObject.prototype.getposy = function () {
-  return this.pos_y;
-};
-
-MovingObject.prototype.getposx = function () {
-  return this.pos_x;
-};
-
-MovingObject.prototype.setposy = function () {
-  return this.pos_y;
-};
-
-MovingObject.prototype.setposx = function () {
-  return this.pos_x;
-};
 
 MovingObject.prototype.move = function () {
 };
@@ -176,23 +161,54 @@ obstacle.prototype.move = function () {
     }.bind(this), 50);
 };
 
-//##########################     Cloud class     #####
-var Cloud = function() {
-  MovingObject.call(this);
+//##########################     environment Class    #####
+
+const  Environment = function (x = 0 , y = 0, dx = 2) {
+    MovingObject.call(this , x , y , dx)
+    this.x = 0 ;
+};
+
+Environment.prototype.move = function(){
+  setInterval(function(){
+      this.x -= this.dx ;
+      gamepage.style.backgroundPositionX =  this.x + "px"
+  }.bind(this) ,50)
+};
+
+//##########################     Character Choose     #####
+
+var characterChoose = function() {
+  var j = true;
+  for (var i = 0; i < character.length; i++) {
+    if (character[i].checked === true) {
+      birdwings = birdImages[i];
+      j = false;
+    }else if(i === character.length-1 && j){
+      birdwings = birdImages[character.length];
+    }
+  }
 }
 
-Cloud.prototype = Object.create(MovingObject.prototype);
-Cloud.prototype.constructor = obstacle;
+//##########################     levels Start    #####
 
-//##########################     Background class     #####
-var Background = function() {
-  MovingObject.call(this);
+var levelsinit = function(){
+  showlevel.addEventListener("click", function() {
+      startpage.style.display = 'none';
+      level.style.display = 'block';
+
+      for (var i = 0; i < levelsPics.length; i++) {
+        l = levelsPics[i];
+        levels[i].addEventListener("click" , function (e , levelsPic = levelsPics) {
+            gamepage.style.backgroundImage = levelsPic;
+            characterChoose();
+            level.style.display = 'none';
+            gamepage.style.display = 'block';
+            gameloop();
+        });
+      }
+  })
+
 }
-
-Background.prototype = Object.create(MovingObject.prototype);
-Background .prototype.constructor = obstacle;
-
-
 
 //##########################    the game loop     ############
 // game loope should be object that get the level and the other parameters
@@ -202,11 +218,6 @@ gameloop = function (level = 1) {
   this.birdplayer = new bird;
   console.log(this.birdplayer)
 
-  ///////
-  if(this.birdplayer.scoree === 4)
-    {
-        gamepage.style.backgroundImage = "url('images/12.png')";
-    }
   // create the obstacles
   groundObstacles = [];
   for (var i = 0; i < level * 3; i++) {
@@ -214,9 +225,8 @@ gameloop = function (level = 1) {
     groundObstacles[i].move();
   }
 
-//////
   const Env = new Environment()
-  Env.movesky();
+  Env.move();
 
   this.birdplayer.setplayername(playername.value);
   var printname = this.birdplayer.getplayername();
@@ -280,93 +290,22 @@ gameloop = function (level = 1) {
 };
 
 
-//##########################     starting the game     #####
+//##########################     starting the game normally without levels    #####
 // play button listner
 playbutton.addEventListener("click", function() {
-  var j = true;
-  for (var i = 0; i < character.length; i++) {
-    if (character[i].checked === true) {
-      birdwings = birdImages[i];
-      j = false;
-    }else if(i === character.length-1 && j){
-      birdwings = birdImages[character.length];
-    }
-  }
-
-  images();
+  characterChoose();
   startpage.style.display = 'none';
   gamepage.style.display = 'block';
   header.style.display = 'block';
   newgame = gameloop(); // ... should take the level
 })
 
-//##########################     images     #####
-function images() {
-    if (character[0].checked === true) {
-        birdwings = ["images/1.png","images/2.png","images/3.png","images/4.png"];
-    }
-    if (character[1].checked === true) {
-        birdwings = ["images/11.png","images/22.png","images/33.png","images/44.png"];
-    }
-    if (character[0].checked === false && character[1].checked === false) {
-        birdwings = ["images/111.png","images/222.png","images/333.png","images/444.png"];
-    }
-}
-
-//##########################     levels     #####
-
-    showlevel.addEventListener("click", function() {
-    startpage.style.display = 'none';
-    level.style.display = 'block';
-})
-
-level_1_btn.addEventListener("click" , function () {
-    images();
-    level.style.display = 'none';
-    gamepage.style.backgroundImage = "url('images/12.png')";
-    gamepage.style.display = 'block';
-    gameloop();
-
-});
-
-level_2_btn.addEventListener("click" , function () {
-    images();
-    level.style.display = 'none';
-    gamepage.style.backgroundImage = "url('images/2.jpg')";
-    gamepage.style.display = 'block';
-    gameloop();
-
-});
-
-level_3_btn.addEventListener("click" , function () {
-    images();
-    level.style.display = 'none';
-    gamepage.style.backgroundImage = "url('images/3.jpg')";
-    gamepage.style.display = 'block';
-    gameloop();
-
-});
-
-//##########################     environment     #####
-
-const  Environment = function () {
-    this.currentpos = 0 ;
-};
-Environment.prototype.moveground = function()
-{
-    this.currentpos -= 2 ;
-    gamepage.style.backgroundPositionX =  this.currentpos + "px"
-
-};
-Environment.prototype.movesky = function () {
-    var i = setInterval(this.moveground.bind(this) ,50)
-
-};
 
 //##########################     loading page     #####
 function loadingpage() {
   var bar = document.getElementById('progress-bar')
   var prog = document.getElementById('progress');
+  var progress = 25;
   loadinginterval = setInterval(function() {
     if (progress === 500) {
       clearInterval(loadinginterval);
@@ -374,7 +313,6 @@ function loadingpage() {
       startpage.style.display = "block"
     }
     else {
-      var progress = 25;
       progress += 5;
       prog.style.width = progress + 'px';
     }
@@ -382,9 +320,9 @@ function loadingpage() {
 }
 
 
-function gamestart(){
+function initiateGame(){
   loadingpage();
-  Environment();
+  levelsinit();
 }
 
-gamestart();
+initiateGame();
