@@ -1,3 +1,17 @@
+// remove
+var heightarray = ["70","90","110","130","150","170","190","210,230,300"];
+var header = document.getElementById('header-bar')
+var level = document.getElementById("level")
+var choosebtn = document.getElementById("choose")
+var levelsimg = document.getElementById("levels")
+var showlevel = document.getElementById("showlevel")
+var level_1_btn = document.getElementById("choose1")
+var level_2_btn = document.getElementById("choose2")
+var level_3_btn = document.getElementById("choose3")
+
+
+
+
 // ##### the global variables #####
 // pages
 var startpage = document.getElementById('startpage');
@@ -15,6 +29,8 @@ var playbutton = document.getElementById('startplay');
 var character = document.getElementsByClassName('character');
 // game page attributes
 var img = document.getElementById('bird1');
+img.width = 80;
+img.height = 60;
 // end page attributes
 var endgame = document.getElementById('endgame');
 var playagainbtn = document.getElementById('playagain');
@@ -27,7 +43,11 @@ var birdwings = [];
 var count = 0;
 var keepjump = 'true';
 var crash = 'false';
-
+var birdImages = [
+  ["images/1.png","images/2.png","images/3.png","images/4.png"],
+  ["images/11.png","images/22.png","images/33.png","images/44.png"],
+  ["images/111.png","images/222.png","images/333.png","images/444.png"] // default images
+]
 //##########################     Moving Object Class     #####
 var MovingObject = function(x , y , dx , dy) {
   this.pos_x = x;
@@ -55,8 +75,8 @@ MovingObject.prototype.setposx = function () {
 MovingObject.prototype.move = function () {
 };
 //##########################     bird class     #####
- var bird = function(x = 150, y = 100 , lives = 3) {
-   MovingObject.call(this,x , y , dx = 0 , dy = 7);
+ var bird = function(x = 20, y = 20 , lives = 3) {
+   MovingObject.call(this,x , y , dx = 0 , dy = 15);
    this.player_name;
    this.initiallives = lives;
    this.lives = this.initiallives;
@@ -70,7 +90,7 @@ bird.prototype.constructor = bird;
 bird.prototype.move = function( time = 90){
   window.addEventListener('keyup', function(event) {
     if (this.pos_y > 10 && keepjump === 'true') {
-      this.pos_y -= 40;
+      this.pos_y -= 35;
       img.style.top = this.pos_y +'px';
     }
   }.bind(this))
@@ -136,28 +156,25 @@ obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
 obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
 
 // append images instead of dealing with one obstacle
-var obstacles = function() {
-  MovingObject.call(this, 10,0);
+var obstacle = function(x = -50, y = 0, dx = 5) {
+  MovingObject.call(this, x, y, dx );
 }
 
-obstacles.prototype = Object.create(MovingObject.prototype);
-obstacles.prototype.constructor = obstacles;
+obstacle.prototype = Object.create(MovingObject.prototype);
+obstacle.prototype.constructor = obstacle;
 
-obstacles.prototype.move = function () {
+obstacle.prototype.move = function () {
   moveleft = setInterval( function(){
-      this.pos_x += 10;
+      this.pos_x += this.dx;
       obsimage.style.right = this.pos_x +"px";
-      if (this.pos_x > window.innerWidth) {
-        this.pos_x = 10;
+
+      if (this.pos_x > 800) {
+        this.pos_x = -50;
         obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
         obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
       }
     }.bind(this), 50);
 };
-
-  // var obstacle = document.createElement("img")		--> Creating The Element(get The Element)
-  // var gamediv = document.getElementById('myDiv')
-	// gamediv.appendChild(obstacle)
 
 //##########################     Cloud class     #####
 var Cloud = function() {
@@ -165,7 +182,7 @@ var Cloud = function() {
 }
 
 Cloud.prototype = Object.create(MovingObject.prototype);
-Cloud.prototype.constructor = obstacles;
+Cloud.prototype.constructor = obstacle;
 
 //##########################     Background class     #####
 var Background = function() {
@@ -173,36 +190,56 @@ var Background = function() {
 }
 
 Background.prototype = Object.create(MovingObject.prototype);
-Background .prototype.constructor = obstacles;
+Background .prototype.constructor = obstacle;
 
 
 
 //##########################    the game loop     ############
-function gameloop() {
-  var b1 = new bird;
-  var obs = new obstacles;
-  obs.move();
+// game loope should be object that get the level and the other parameters
 
-  b1.setplayername(playername.value);
-  var printname = b1.getplayername();
+gameloop = function (level = 1) {
+  // create the main player
+  this.birdplayer = new bird;
+  console.log(this.birdplayer)
+
+  ///////
+  if(this.birdplayer.scoree === 4)
+    {
+        gamepage.style.backgroundImage = "url('images/12.png')";
+    }
+  // create the obstacles
+  groundObstacles = [];
+  for (var i = 0; i < level * 3; i++) {
+    groundObstacles[i] = new obstacle(10,0,level*10);
+    groundObstacles[i].move();
+  }
+
+//////
+  const Env = new Environment()
+  Env.movesky();
+
+  this.birdplayer.setplayername(playername.value);
+  var printname = this.birdplayer.getplayername();
   displayname.innerHTML = `Player: ${printname}`;
 
-  b1.main();
+  this.birdplayer.main();
 
   // ... dealing with bird crashing
   setInterval(function crash () {
   // solution for crashing .. mmove function get array of obstacles and check on them
-   if ( ( parseInt(getComputedStyle(obsimage).left) <= b1.pos_x && b1.pos_y+50 >= parseInt(getComputedStyle(obsimage).top) )
-        || b1.pos_y > window.innerHeight-120 && b1.lives > 0) {
-       b1.pos_y = 100;
-       b1.lives--;
-       displaylives1.innerHTML = ` x${b1.lives}`;
-       whencrash();
-   }
-  }, 50);
+  //
+  if ( ( (parseInt(getComputedStyle(obsimage).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage).top)) )
+      || this.birdplayer.pos_y > 500 && this.birdplayer.lives > 0) {
+        this.birdplayer.pos_y = 20;
+        this.birdplayer.lives--;
+        displaylives1.innerHTML = ` x${this.birdplayer.lives}`;
+        whencrash();
+     }
+  }.bind(this), 50);
 
 
   whencrash = function () {
+
     function clearintervals(){
       clearInterval(grav);
       clearInterval(wingmov);
@@ -213,39 +250,38 @@ function gameloop() {
     img.src = "images/5.png"
 
     setTimeout(function() {
-      img.src = birdwings;
-      b1.wingmove();
-      b1.move();
-      b1.printscore();
-    }, 1000)
+      img.src = birdwings[0];
+      this.birdplayer.wingmove();
+      this.birdplayer.move();
+      this.birdplayer.printscore();
+    }.bind(this), 1000)
 
-    if (this.lives === 0) {
+
+    if (this.birdplayer.lives === 0) {
      clearintervals();
      startpage.style.display = 'none';
      gamepage.style.display = 'none';
      endpage.style.display = 'block';
-     showscore.innerHTML = `${b1.player_name} Your Final Score Is: ${b1.scoree}`
-    }
-  };
+
+     showscore.innerHTML = `${this.birdplayer.player_name} Your Final Score Is: ${this.birdplayer.scoree}`
+   }
+  }
 
   playagain.addEventListener("click", function() {
-    b1.scoree = 0;
-    b1.pos_y = 100;
-    b1.lives = b1.initiallives;
-    b1.main();
+    this.birdplayer.scoree = 0;
+    this.birdplayer.pos_y = 20;
+    this.birdplayer.lives = this.birdplayer.initiallives;
+    this.birdplayer.main();
     startpage.style.display = 'none';
     gamepage.style.display = 'block';
+    header.style.display = 'block';
     endpage.style.display = 'none';
-  })
-}
+  }.bind(this))
+};
 
-var birdImages = [
-  ["images/1.png","images/2.png","images/3.png","images/4.png"],
-  ["images/11.png","images/22.png","images/33.png","images/44.png"],
-  ["images/111.png","images/222.png","images/333.png","images/444.png"] // default images
-]
 
-// play button
+//##########################     starting the game     #####
+// play button listner
 playbutton.addEventListener("click", function() {
   var j = true;
   for (var i = 0; i < character.length; i++) {
@@ -257,7 +293,98 @@ playbutton.addEventListener("click", function() {
     }
   }
 
+  images();
   startpage.style.display = 'none';
   gamepage.style.display = 'block';
-  gameloop();
+  header.style.display = 'block';
+  newgame = gameloop(); // ... should take the level
 })
+
+//##########################     images     #####
+function images() {
+    if (character[0].checked === true) {
+        birdwings = ["images/1.png","images/2.png","images/3.png","images/4.png"];
+    }
+    if (character[1].checked === true) {
+        birdwings = ["images/11.png","images/22.png","images/33.png","images/44.png"];
+    }
+    if (character[0].checked === false && character[1].checked === false) {
+        birdwings = ["images/111.png","images/222.png","images/333.png","images/444.png"];
+    }
+}
+
+//##########################     levels     #####
+
+    showlevel.addEventListener("click", function() {
+    startpage.style.display = 'none';
+    level.style.display = 'block';
+})
+
+level_1_btn.addEventListener("click" , function () {
+    images();
+    level.style.display = 'none';
+    gamepage.style.backgroundImage = "url('images/12.png')";
+    gamepage.style.display = 'block';
+    gameloop();
+
+});
+
+level_2_btn.addEventListener("click" , function () {
+    images();
+    level.style.display = 'none';
+    gamepage.style.backgroundImage = "url('images/2.jpg')";
+    gamepage.style.display = 'block';
+    gameloop();
+
+});
+
+level_3_btn.addEventListener("click" , function () {
+    images();
+    level.style.display = 'none';
+    gamepage.style.backgroundImage = "url('images/3.jpg')";
+    gamepage.style.display = 'block';
+    gameloop();
+
+});
+
+//##########################     environment     #####
+
+const  Environment = function () {
+    this.currentpos = 0 ;
+};
+Environment.prototype.moveground = function()
+{
+    this.currentpos -= 2 ;
+    gamepage.style.backgroundPositionX =  this.currentpos + "px"
+
+};
+Environment.prototype.movesky = function () {
+    var i = setInterval(this.moveground.bind(this) ,50)
+
+};
+
+//##########################     loading page     #####
+function loadingpage() {
+  var bar = document.getElementById('progress-bar')
+  var prog = document.getElementById('progress');
+  loadinginterval = setInterval(function() {
+    if (progress === 500) {
+      clearInterval(loadinginterval);
+      bar.style.display = "none"
+      startpage.style.display = "block"
+    }
+    else {
+      var progress = 25;
+      progress += 5;
+      prog.style.width = progress + 'px';
+    }
+  },10)
+}
+
+
+function gamestart(){
+  loadingpage();
+  Environment();
+}
+
+gamestart();
