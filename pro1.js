@@ -283,6 +283,27 @@ Environment.prototype.movesky = function () {
 
 };
 
+///////////////coin ////////////////////
+//coin_img.src = coin_array[Math.floor(Math.random() * coin_array.length)];
+//var coins = function() {
+ //   this.posx = 50;
+ //   this.posy = 0;
+//}
+//coins.prototype.setposx = function () {
+ //   this.posx += 5;
+ //   coin_img.style.right = this.posx +"px";
+ //   if (this.posx >= 800) {
+  //      this.posx = -50;
+//
+    //        coin_img.src = coin_array[Math.floor(Math.random() * coin_array.length)];
+  //          coin_img.style.backgroundPositionY = coin_pos ;
+//
+  //  }
+//};
+//
+//coins.prototype.obsmove = function () {
+  //  moveleft = setInterval(this.setposx.bind(this), 30);
+//};
 
 function loadingpage() {
   var bar = document.getElementById('progress-bar')
