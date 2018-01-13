@@ -20,7 +20,7 @@ img.height = 60;
 var endgame = document.getElementById('endgame');
 var playagainbtn = document.getElementById('playagain');
 // obstacle images
-var obsimage = document.getElementById('obsimage');
+// var obsimage = document.getElementById('obsimage');
 var imagesarray = ["images/obs2.png","images/obs1.png"];
 var heightarray = ["70","90","110","130","150","170","190","210,230,300"];
 // bird attributes
@@ -136,12 +136,11 @@ bird.prototype.main = function (){
 //##########################    Obstacles Class  ########
 // var obsimage = document.createElement("img");
 // var myDiv = document.getElementById('obsimage');
-// myDiv.appendChild(image);
-
+// myDiv.appendChild(obsimage);
+// obsimage.width = 50;
 obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
 obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
-// obsimage.width = 50;
-// append images instead of dealing with one obstacle
+
 var obstacle = function(x = -50, y = 0, dx = 5) {
   MovingObject.call(this, x, y, dx );
 }
@@ -150,7 +149,7 @@ obstacle.prototype = Object.create(MovingObject.prototype);
 obstacle.prototype.constructor = obstacle;
 
 obstacle.prototype.move = function () {
-  setInterval( function(){
+  moveleft = setInterval( function(){
       this.pos_x += this.dx;
       obsimage.style.right = this.pos_x +"px";
 
@@ -201,18 +200,19 @@ gameloop = function (level = 1) {
 
   const Env = new Environment();
   Env.move();
-};
 
-gameloop.prototype.createMoveObstacles = function (){
-  obs = new obstacle(10 , 0 , this.level*10)
-  // this.groundObstacles = [];
+// creating obstacles
+  this.groundObstacles = [];
+  for (var i = 0; i <1; i++) {
+    this.groundObstacles[i] = new obstacle(10,0,level*10);
+    this.groundObstacles[i].move();
+  }
+
   // for (var i = 0; i < this.level * 3; i++) {
-  //   this.groundObstacles[i] = new obstacle(10 , 0 , this.level*10);
-  //
-  //   setTimeout(this.groundObstacles[i].move(),300)
-  //   // console.log(this.groundObstacles[i])
+  //   this.groundObstacles[i] = new obstacle(10,0,level*10);
+  //   this.groundObstacles[i].move();
   // }
-}
+};
 
 gameloop.prototype.crashDetection = function(){
   setInterval(function () {
@@ -267,7 +267,6 @@ gameloop.prototype.Playagain = function(){
 
 gameloop.prototype.main = function(){
   this.birdplayer.main();
-  this.createMoveObstacles();
   this.crashDetection();
   this.Playagain();
 }
