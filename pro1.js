@@ -1,3 +1,8 @@
+//
+var medal1 = document.getElementById('stmedal')
+var medal2 = document.getElementById('ndmedal')
+var medal3 = document.getElementById('thmedal')
+
 // ##### the global variables #####
 // pages
 var startpage = document.getElementById('startpage');
@@ -34,7 +39,7 @@ var birdImages = [
   ["images/111.png","images/222.png","images/333.png","images/444.png"] // default images
 ]
 // levels
-var levelsPics = [ "url('images/12.png')" , "url('images/2.jpg')" , "url('images/3.jpg')" ]
+var levelsPics = [ "url('images/b1.png')" , "url('images/b2.png')" , "url('images/b3.png')" ]
 var level = document.getElementById("level")
 var choosebtn = document.getElementById("choose")
 var levelsimg = document.getElementById("levels")
@@ -116,6 +121,15 @@ bird.prototype.wingmove = function () {
  bird.prototype.setscore = function () {
    this.scoree += 2;
    score.innerHTML = `Score: ${this.scoree}`;
+   if (this.scoree >= 10) {
+     medal1.style.opacity = "1";
+   }
+   if (this.scoree >= 20) {
+     medal2.style.opacity = "1";
+   }
+   if (this.scoree >= 30) {
+     medal3.style.opacity = "1";
+   }
  };
 
  bird.prototype.getscore = function () {
@@ -252,6 +266,7 @@ gameloop.prototype.whencrash = function () {
    startpage.style.display = 'none';
    gamepage.style.display = 'none';
    endpage.style.display = 'block';
+   header.style.display = 'block';
    endgame.src = "images/Replay.png";
    showscore.innerHTML = `${this.birdplayer.player_name} Your Final Score Is: ${this.birdplayer.scoree}`
  }
@@ -317,6 +332,7 @@ var levelsinit = function(){
         characterChoose();
         level.style.display = 'none';
         gamepage.style.display = 'block';
+        header.style.display = 'block';
         var newgame = new gameloop();
         newgame.main();
       }

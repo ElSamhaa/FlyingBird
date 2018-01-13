@@ -2,17 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allerta+Stencil">
 <style>
-
-  /* latin */
-  @font-face {
-  font-family: 'Allerta Stencil';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Allerta Stencil Regular'), local('AllertaStencil-Regular'), url(https://fonts.gstatic.com/s/allertastencil/v8/CdSZfRtHbQrBohqmzSdDYHyjZGU_SYMIAZWjSGDHnGA.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
-  }
-
   input.character[type="radio"]{visibility:hidden;}
   input[type=text], select {
     width: 100%;
@@ -22,13 +13,25 @@
     border-radius: 8px;
     box-sizing: border-box;
   }
-#choose1, #choose2, #choose3{
+#choose1{
   margin-top: 150px;
   padding-right: 10px;
   background-color: rgba(117, 190, 218, 0.1);
   border: none;
 }
+#choose2{
+  padding-right: 10px;
+  margin-top: 150px;
+  background-color: rgba(117, 190, 218, 0.1);
+  border: none;
 
+}
+#choose3{
+  padding-right: 10px;
+margin-top: 150px;
+  background-color: rgba(117, 190, 218, 0.1);
+  border: none;
+}
   #bird1{
     position: relative;
     top: 20px;
@@ -87,6 +90,9 @@
 }
 #gamepage{
   overflow: hidden;
+  background-size: 800px 450px;
+  background-repeat: repeat-x;
+  background-position: center center;
 }
 #displayname{
   position: absolute;
@@ -144,7 +150,6 @@
   right: -50px;
 }
 /*end new*/
-
 #progress-bar{
   width: 506px;
   height: 26px;
@@ -170,8 +175,8 @@
   background-color: gray;
   border: 1px solid black;
   border-radius: 6px;
-  top: 8px;
-  left: 250px;
+  top: 0px;
+  left: 0px;
 }
 </style>
   <script>
@@ -185,8 +190,8 @@
           x.style.width = "200px";
       }
       function levelBig(x) {
-          x.style.height = "160px";
-          x.style.width = "160px";
+          x.style.height = "165px";
+          x.style.width = "165px";
       }
 
       function levelNormal(x) {
@@ -222,19 +227,24 @@
     <img id="showlevel" src="images/Level.png" width="200" height="60">
 
   </div>
-  <div id="header-bar" style="display:none">
-    <b id="displayname"></b>
-    <img id="displaylives" height="27" width="40"/>
-    <b id="displaylives1"></b>
-    <b id="score"></b>
-  </div>
-  <div id="gamepage" class="container" style="display:none">
-    <img id="bird1">
-<!-- new -->
-    <div id="newobsimage">
 
+  <div id="gamepage" class="container" style="display:none">
+    <div id="header-bar" style="display:none">
+      <b id="displayname"></b>
+      <img id="displaylives" height="27" width="40"/>
+      <b id="displaylives1"></b>
+      <b id="score"></b>
+      <img id="stmedal" width="20" height="23" src="images/m1.png" style="position:absolute;top:1px;left:600px;opacity:0.4"/>
+      <img id="ndmedal" width="20" height="23" src="images/m2.png" style="position:absolute;top:1px;left:650px;opacity:0.4"/>
+      <img id="thmedal" width="20" height="23" src="images/m3.png" style="position:absolute;top:1px;left:700px;opacity:0.4"/>
     </div>
-<!-- end new -->
+    <img id="bird1">
+    <!-- new -->
+        <div id="newobsimage">
+
+        </div>
+    <!-- end new -->
+
   </div>
 
   <div id="endpage" class="container" style="display:none">
@@ -242,15 +252,15 @@
     <h2><b id="showscore"></b></h2>
     <a id="main" href=""><img src="images/main.png" width="130" height="130"/></a>
   </div>
-
   <div id="level" class="container" style="display:none" align="center">
 
-    <button id="choose1" value="1"><img src="images/12.png" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
-    <button id="choose2" value="2"><img src="images/2.jpg" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
-    <button id="choose3" value="3"><img src="images/3.jpg" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
+    <button id="choose1" value="1"><img src="images/b1.png" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
+    <button id="choose2" value="2"><img src="images/b2.png" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
+    <button id="choose3" value="3"><img src="images/b3.png" width="130" height="130" onmouseover="levelBig(this)" onmouseout="levelNormal(this)"></button>
 
 
   </div>
 <script src="pro1.js"></script>
+<!-- <script src="pro2.js"></script> -->
 </body>
 </html>
