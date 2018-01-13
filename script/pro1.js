@@ -309,6 +309,7 @@ if (this.birdplayer.lives > 0) {
 	  setTimeout(function() {
     img.src = birdwings[0];
     this.birdplayer.main();
+    this.Env.move();
   }.bind(this), 1000)
 }
 
