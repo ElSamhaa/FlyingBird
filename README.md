@@ -1,2 +1,8 @@
-# FlyingBird
-A simple game of a flying bird trying to avoid crashing into obstacles 
+# FlyingBird (TRex Flavor)
+A simple game of a flying trex trying to avoid crashing into obstacles 
+here is an online playground:
+https://assamhaa.github.io/FlyingBird/index.html
+
+# flappy_birdhttps://github.com/AsSamhaa/FlyingBird/wiki
+ +here is the link to io link
+ +https://mohamed-assem92.github.io/flappy_bird/pro1.html
