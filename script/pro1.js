@@ -256,9 +256,8 @@ gameloop = function (level = 1) {
     this.groundObstacles[this.i] = new obstacle(10,0,this.level*10);
     this.groundObstacles[this.i].move();
 
-    this.flyingObstacle[this.i] = new flyingObstacle(-700,5,this.level*10)
-    console.log(this.flyingObstacle[this.i].pos_y)
-    this.flyingObstacle[this.i].move();
+    // this.flyingObstacle[this.i] = new flyingObstacle(-700,5,this.level*10)
+    // this.flyingObstacle[this.i].move();
     this.i++;
     if(this.i < this.level * 3){
       setTimeout(clback,1000)
@@ -282,15 +281,15 @@ gameloop = function (level = 1) {
 	      	}
       	}
 
-        if ( parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).left)-50 <= this.birdplayer.pos_x) {
-            if (this.birdplayer.pos_y+30 <= parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).top)
-            && this.birdplayer.pos_y-30 >= parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).bottom)){
-                this.birdplayer.pos_y = 20;
-                this.birdplayer.lives--;
-                displaylives1.innerHTML = ` x${this.birdplayer.lives}`;
-                this.whencrash();
-            }
-          }
+        // if ( parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).left)-50 <= this.birdplayer.pos_x) {
+        //     if (this.birdplayer.pos_y+30 <= parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).top)
+        //     && this.birdplayer.pos_y-30 >= parseInt(window.getComputedStyle(this.obsFlyingImage.children[i]).bottom)){
+        //         this.birdplayer.pos_y = 20;
+        //         this.birdplayer.lives--;
+        //         displaylives1.innerHTML = ` x${this.birdplayer.lives}`;
+        //         this.whencrash();
+        //     }
+        //   }
     }
   }.bind(this), 50);
 }
