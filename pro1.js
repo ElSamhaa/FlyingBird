@@ -313,7 +313,6 @@ var levelsinit = function(){
   showlevel.addEventListener("click", function() {
       startpage.style.display = 'none';
       level.style.display = 'block';
-      // for (var i = 0; i < 3; i++) {
       startlevel = function(){
         characterChoose();
         level.style.display = 'none';
@@ -322,12 +321,18 @@ var levelsinit = function(){
         newgame.main();
       }
 
-      for (var i = 0; i < levels.length; i++) {
-        levels[i].addEventListener("click" , function () {
-            gamepage.style.backgroundImage = levelsPics[i];
+        levels[0].addEventListener("click" , function () {
+             gamepage.style.backgroundImage = levelsPics[0];
+             startlevel()
+        })
+        levels[1].addEventListener("click" , function () {
+            gamepage.style.backgroundImage = levelsPics[1];
             startlevel()
-        },i);
-      }
+        });
+        levels[2].addEventListener("click" , function () {
+            gamepage.style.backgroundImage = levelsPics[2];
+            startlevel()
+        });
   })
 }
 
