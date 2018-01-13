@@ -141,9 +141,12 @@ bird.prototype.wingmove = function () {
  };
 
 bird.prototype.main = function (){
-  this.move();
-  this.wingmove();
-  this.printscore();
+	if(this.lives >= 0){
+
+	  this.move();
+	  this.wingmove();
+	  this.printscore();
+	}
 }
 
 //##########################    Obstacles Class  ########
@@ -249,6 +252,7 @@ gameloop.prototype.whencrash = function () {
   function clearintervals(){
     clearInterval(this.crashDetInt);//...
     clearInterval(grav);
+    console.log(grav)
     clearInterval(wingmov);
     clearInterval(scoreint);
   }
@@ -256,10 +260,12 @@ gameloop.prototype.whencrash = function () {
   clearintervals();
   img.src = "images/5.png"
 
-  setTimeout(function() {
+if (this.birdplayer.lives > 0) {
+	  setTimeout(function() {
     img.src = birdwings[0];
     this.birdplayer.main();
   }.bind(this), 1000)
+}
 
   if (this.birdplayer.lives === 0) {
    clearintervals();
