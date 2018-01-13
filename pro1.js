@@ -25,7 +25,6 @@ img.height = 60;
 var endgame = document.getElementById('endgame');
 var playagainbtn = document.getElementById('playagain');
 // obstacle images
-// var obsimage = document.getElementById('obsimage');
 var imagesarray = ["images/obs2.png","images/obs1.png"];
 var heightarray = ["70","90","110","130","150","170","190","210,230,300"];
 // bird attributes
@@ -183,14 +182,13 @@ const  Environment = function (x = 0 , y = 0, dx = 2) {
 };
 
 Environment.prototype.move = function(){
-  setInterval(function(){
+  this.EnvInterval = setInterval(function(){
       this.x -= this.dx ;
       gamepage.style.backgroundPositionX =  this.x + "px"
   }.bind(this) ,50)
 };
 
 //##########################     Character Choose     #####
-
 var characterChoose = function() {
   var j = true;
   for (var i = 0; i < character.length; i++) {
@@ -212,8 +210,8 @@ gameloop = function (level = 1) {
   var printname = this.birdplayer.getplayername();
   displayname.innerHTML = `Player: ${printname}`;
 
-  const Env = new Environment();
-  Env.move();
+  this.Env = new Environment();
+  this.Env.move();
 
 // creating obstacles
   this.groundObstacles = [];
@@ -231,11 +229,12 @@ gameloop = function (level = 1) {
 };
 
 gameloop.prototype.crashDetection = function(){
-  setInterval(function () {
+  this.crashDetInt = setInterval(function () {
     var obsimage = document.getElementById('newobsimage')
 
     for (var i = 0; i <this.level * 3 ; i++) {
-      if ( ( (parseInt(getComputedStyle(obsimage.children[i]).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage.children[i]).top)) )
+      if ( ( (parseInt(window.getComputedStyle(obsimage.children[i]).left) <= this.birdplayer.pos_x)
+      && (this.birdplayer.pos_y+50 >= parseInt(window.getComputedStyle(obsimage.children[i]).top)) )
           || this.birdplayer.pos_y > 500 && this.birdplayer.lives > 0) {
             this.birdplayer.pos_y = 20;
             this.birdplayer.lives--;
@@ -248,6 +247,7 @@ gameloop.prototype.crashDetection = function(){
 
 gameloop.prototype.whencrash = function () {
   function clearintervals(){
+    clearInterval(this.crashDetInt);//...
     clearInterval(grav);
     clearInterval(wingmov);
     clearInterval(scoreint);
@@ -263,6 +263,7 @@ gameloop.prototype.whencrash = function () {
 
   if (this.birdplayer.lives === 0) {
    clearintervals();
+   clearInterval(this.Env.EnvInterval);
    startpage.style.display = 'none';
    gamepage.style.display = 'none';
    endpage.style.display = 'block';

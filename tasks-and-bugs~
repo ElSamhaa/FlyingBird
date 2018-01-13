@@ -4,6 +4,7 @@
 -- bug --> everytime it repeat the game again .. speed up
 -- bug --> background movement loop keep working after game over
 -- bug --> score does not stop counting after dying 
--- bug --> obstacles become very tall
 
--- bug --> in levels background info bar does not appear .. assem solced it
+
+
+clear all intervals (crash detection , wingmove , bird pal)

@@ -5,4 +5,6 @@
 -- bug --> background movement loop keep working after game over
 -- bug --> score does not stop counting after dying 
 
--- bug --> in levels background info bar does not appear .. assem solced it
+
+
+clear all intervals (crash detection , wingmove , bird palayer)
