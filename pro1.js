@@ -140,7 +140,9 @@ var obstacle = function(x = -50, y = 0, dx = 5) {
   this.myDiv = document.getElementById('newobsimage');
   this.myDiv.appendChild(this.obsimage);
   this.obsimage.width = 50;
-  this.obsimage.setAttribute('id','obsid')
+  this.obsimage.setAttribute('id','obsid');
+  this.obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
+  this.obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
 }
 
 obstacle.prototype = Object.create(MovingObject.prototype);
@@ -201,27 +203,32 @@ gameloop = function (level = 1) {
 
 // creating obstacles
   this.groundObstacles = [];
-  for (var i = 0; i <1; i++) {
-    this.groundObstacles[i] = new obstacle(10,0,level*10);
-    this.groundObstacles[i].move();
-  }
+  this.i = 0;
 
-  // for (var i = 0; i < this.level * 3; i++) {
-  //   this.groundObstacles[i] = new obstacle(10,0,level*10);
-  //   this.groundObstacles[i].move();
-  // }
+  clback = function(){
+    this.groundObstacles[this.i] = new obstacle(10,0,this.level*10);
+    this.groundObstacles[this.i].move();
+    this.i++;
+    if(this.i < this.level * 3){
+      setTimeout(clback,1000)
+    }
+  }.bind(this)
+  clback();
 };
 
 gameloop.prototype.crashDetection = function(){
   setInterval(function () {
     var obsimage = document.getElementById('newobsimage')
-  if ( ( (parseInt(getComputedStyle(obsimage.children[0]).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage.children[0]).top)) )
-      || this.birdplayer.pos_y > 500 && this.birdplayer.lives > 0) {
-        this.birdplayer.pos_y = 20;
-        this.birdplayer.lives--;
-        displaylives1.innerHTML = ` x${this.birdplayer.lives}`;
-        this.whencrash();
-     }
+
+    for (var i = 0; i <this.level * 3 ; i++) {
+      if ( ( (parseInt(getComputedStyle(obsimage.children[i]).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage.children[i]).top)) )
+          || this.birdplayer.pos_y > 500 && this.birdplayer.lives > 0) {
+            this.birdplayer.pos_y = 20;
+            this.birdplayer.lives--;
+            displaylives1.innerHTML = ` x${this.birdplayer.lives}`;
+            this.whencrash();
+      }
+    }
   }.bind(this), 50);
 }
 
@@ -314,20 +321,13 @@ var levelsinit = function(){
         var newgame = new gameloop();
         newgame.main();
       }
-        levels[0].addEventListener("click" , function () {
-            gamepage.style.backgroundImage = levelsPics[0];
-            startlevel()
-        });
 
-        levels[1].addEventListener("click" , function () {
-            gamepage.style.backgroundImage = levelsPics[1];
+      for (var i = 0; i < levels.length; i++) {
+        levels[i].addEventListener("click" , function () {
+            gamepage.style.backgroundImage = levelsPics[i];
             startlevel()
-        });
-        levels[2].addEventListener("click" , function () {
-            gamepage.style.backgroundImage = levelsPics[2];
-            startlevel()
-        });
-      // }
+        },i);
+      }
   })
 }
 
