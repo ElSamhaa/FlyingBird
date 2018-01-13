@@ -134,15 +134,13 @@ bird.prototype.main = function (){
 }
 
 //##########################    Obstacles Class  ########
-// var obsimage = document.createElement("img");
-// var myDiv = document.getElementById('obsimage');
-// myDiv.appendChild(obsimage);
-// obsimage.width = 50;
-obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
-obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
-
 var obstacle = function(x = -50, y = 0, dx = 5) {
   MovingObject.call(this, x, y, dx );
+  this.obsimage = document.createElement("img");
+  this.myDiv = document.getElementById('newobsimage');
+  this.myDiv.appendChild(this.obsimage);
+  this.obsimage.width = 50;
+  this.obsimage.setAttribute('id','obsid')
 }
 
 obstacle.prototype = Object.create(MovingObject.prototype);
@@ -151,12 +149,12 @@ obstacle.prototype.constructor = obstacle;
 obstacle.prototype.move = function () {
   moveleft = setInterval( function(){
       this.pos_x += this.dx;
-      obsimage.style.right = this.pos_x +"px";
+      this.obsimage.style.right = this.pos_x +"px";
 
       if (this.pos_x > 800) {
         this.pos_x = -50;
-        obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
-        obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
+        this.obsimage.src = imagesarray[Math.floor(Math.random() * imagesarray.length)];
+        this.obsimage.height = heightarray[Math.floor(Math.random() * heightarray.length)];
       }
     }.bind(this), 50);
 };
@@ -216,8 +214,8 @@ gameloop = function (level = 1) {
 
 gameloop.prototype.crashDetection = function(){
   setInterval(function () {
-  // solution for crashing .. mmove function get array of obstacles and check on them
-  if ( ( (parseInt(getComputedStyle(obsimage).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage).top)) )
+    var obsimage = document.getElementById('newobsimage')
+  if ( ( (parseInt(getComputedStyle(obsimage.children[0]).left) <= this.birdplayer.pos_x) && (this.birdplayer.pos_y+50 >= parseInt(getComputedStyle(obsimage.children[0]).top)) )
       || this.birdplayer.pos_y > 500 && this.birdplayer.lives > 0) {
         this.birdplayer.pos_y = 20;
         this.birdplayer.lives--;
