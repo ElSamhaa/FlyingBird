@@ -149,12 +149,6 @@ margin-top: 150px;
   bottom: 25px;
   right: -50px;
 }
-
-#flyingObsId{
-  position: relative;
-  bottom: 25px;
-  right: -700px;
-}
 /*end new*/
 #progress-bar{
   width: 506px;
@@ -249,10 +243,6 @@ margin-top: 150px;
         <div id="newobsimage">
 
         </div>
-
-        <div id="flyingObsImage">
-
-        </div>
     <!-- end new -->
 
   </div>
@@ -270,7 +260,7 @@ margin-top: 150px;
 
 
   </div>
-<script src="script/pro1.js"></script>
+<script src="pro1.js"></script>
 <!-- <script src="pro2.js"></script> -->
 </body>
 </html>
