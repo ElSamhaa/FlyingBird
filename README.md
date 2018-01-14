@@ -11,7 +11,7 @@
 	a game of a flying bird trying to avoid crashing into obstacles or falling to the ground
 
 # Instructions:
-	hit SPACEBAR -or any button in TRex Flavor- to lift up your bird, and have fun :)
+	hit any button to lift up your bird, and have fun :)
 
 # Contributors:
 	* Ahmad Hamdy
