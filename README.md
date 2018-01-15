@@ -14,7 +14,7 @@
 	hit any button to lift up your bird, and have fun :)
 
 # Contributors:
-	* Ahmad Hamdy
-	* Ahmad Muhammad AsSamha'
-	* Mohamed Osama Assem
-	* Mohamed Taweela
+	- Ahmad Hamdy
+	- Ahmad Muhammad AsSamha'
+	- Mohamed Osama Assem
+	- Mohamed Taweela
