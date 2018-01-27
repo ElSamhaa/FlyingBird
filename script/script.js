@@ -255,7 +255,7 @@ Ground.prototype.draw = function() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-document.addEventListener('keydown', function() {
+document.addEventListener('click', function() {
 	if(flyingTRexObj.Yspeed > -5) flyingTRexObj.Yspeed -= 5; // set the maximum Yspeed
 	if(flyingTRexObj.Ypos < 0) {flyingTRexObj.Yspeed += 10};
 	if(collisionFlag == true) {
