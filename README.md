@@ -2,7 +2,7 @@
 ## Description:
 > A simple game of a bird trying to avoid crashing into obstacles.
 ## Flavors
-#### [FlyingBird (TRex Flavor)](https://assamhaa.github.io/FlyingBird/index.html)
+#### [TRex Flavor](https://assamhaa.github.io/FlyingBird/index.html)
 
 #### [Flappy bird](https://mohamed-assem92.github.io/flappy_bird/pro1.html)
 
