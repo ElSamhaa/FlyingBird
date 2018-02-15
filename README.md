@@ -1,5 +1,5 @@
 # Flying Bird
-### Description:
+## Description:
 > A simple game of a bird trying to avoid crashing into obstacles.
 ## Flavors
 #### [FlyingBird (TRex Flavor)](https://assamhaa.github.io/FlyingBird/index.html)
